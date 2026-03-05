@@ -1,10 +1,18 @@
 """
 MT5 Connector - Handles all MetaTrader 5 API interactions
 """
-from siliconmetatrader5 import  MetaTrader5 as mt5
+from siliconmetatrader5 import MetaTrader5
 from datetime import datetime
 from typing import Dict, List, Optional, Tuple
 import logging
+import sys
+from pathlib import Path
+
+from dto.LoginDTO import LoginConfig
+
+# Import LoginConfig DTO
+sys.path.insert(0, str(Path(__file__).parent.parent))
+
 
 logger = logging.getLogger(__name__)
 
@@ -12,17 +20,19 @@ logger = logging.getLogger(__name__)
 class MT5Connector:
     """Manages connection and data retrieval from MT5 terminal"""
 
-    def __init__(self, magic_filter: Optional[int] = None):
+    def __init__(self, login_config: Optional[LoginConfig] = None, magic_filter: Optional[int] = None):
         """
         Initialize MT5 connector
 
         Args:
+            login_config: LoginConfig DTO with MT5 credentials
             magic_filter: If provided, only monitor trades with this magic number
         """
+        self.login_config = login_config
         self.magic_filter = magic_filter
         self.connected = False
         self.account_info = None
-        mt5.initialize(host="localhost", port=8001, keepalive=True)
+        self.mt5 = MetaTrader5(host="localhost", port=8001, keepalive=True)
 
     def connect(self) -> bool:
         """
@@ -31,13 +41,26 @@ class MT5Connector:
         Returns:
             True if connected successfully, False otherwise
         """
-
-        if not mt5.initialize():
-            logger.error(f"MT5 initialize() failed, error code: {mt5.last_error()}")
-            return False
+        if self.connected:
+            return True
+        # Initialize with login credentials if provided
+        if self.login_config:
+            if not self.mt5.initialize(
+                login=self.login_config.login,
+                password=self.login_config.password,
+                server=self.login_config.server,
+                timeout=self.login_config.timeout
+            ):
+                logger.error(f"MT5 initialize() failed, error code: {self.mt5.last_error()}")
+                return False
+        else:
+            # Connect to already running MT5 terminal
+            if not self.mt5.initialize():
+                logger.error(f"MT5 initialize() failed, error code: {self.mt5.last_error()}")
+                return False
 
         self.connected = True
-        self.account_info = mt5.account_info()
+        self.account_info = self.mt5.account_info()
 
         if self.account_info is None:
             logger.error("Failed to get account info")
@@ -52,7 +75,7 @@ class MT5Connector:
     def disconnect(self):
         """Disconnect from MT5 terminal"""
         if self.connected:
-            mt5.shutdown()
+            self.mt5.shutdown()
             self.connected = False
             logger.info("Disconnected from MT5")
 
@@ -67,7 +90,7 @@ class MT5Connector:
             logger.error("Not connected to MT5")
             return None
 
-        account = mt5.account_info()
+        account = self.mt5.account_info()
         if account is None:
             logger.error("Failed to get account info")
             return None
@@ -95,7 +118,7 @@ class MT5Connector:
             logger.error("Not connected to MT5")
             return []
 
-        positions = mt5.positions_get()
+        positions = self.mt5.positions_get()
 
         if positions is None:
             logger.warning("No positions found or error getting positions")
@@ -110,7 +133,7 @@ class MT5Connector:
             position_list.append({
                 'ticket': pos.ticket,
                 'symbol': pos.symbol,
-                'type': 'BUY' if pos.type == mt5.ORDER_TYPE_BUY else 'SELL',
+                'type': 'BUY' if pos.type == self.mt5.ORDER_TYPE_BUY else 'SELL',
                 'volume': pos.volume,
                 'price_open': pos.price_open,
                 'price_current': pos.price_current,
@@ -137,7 +160,7 @@ class MT5Connector:
 
         # Get deals from today
         today = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
-        deals = mt5.history_deals_get(today, datetime.now())
+        deals = self.mt5.history_deals_get(today, datetime.now())
 
         if deals is None:
             return []
@@ -149,7 +172,7 @@ class MT5Connector:
                 continue
 
             # Only count out deals (position closes)
-            if deal.entry == mt5.DEAL_ENTRY_OUT:
+            if deal.entry == self.mt5.DEAL_ENTRY_OUT:
                 closed_trades.append({
                     'ticket': deal.ticket,
                     'order': deal.order,
@@ -199,14 +222,14 @@ class MT5Connector:
 
             # Determine close type (opposite of open type)
             if pos['type'] == 'BUY':
-                order_type = mt5.ORDER_TYPE_SELL
-                price = mt5.symbol_info_tick(symbol).bid
+                order_type = self.mt5.ORDER_TYPE_SELL
+                price = self.mt5.symbol_info_tick(symbol).bid
             else:
-                order_type = mt5.ORDER_TYPE_BUY
-                price = mt5.symbol_info_tick(symbol).ask
+                order_type = self.mt5.ORDER_TYPE_BUY
+                price = self.mt5.symbol_info_tick(symbol).ask
 
             request = {
-                "action": mt5.TRADE_ACTION_DEAL,
+                "action": self.mt5.TRADE_ACTION_DEAL,
                 "symbol": symbol,
                 "volume": volume,
                 "type": order_type,
@@ -215,13 +238,13 @@ class MT5Connector:
                 "deviation": 20,
                 "magic": pos['magic'],
                 "comment": "Rule breach - auto close",
-                "type_time": mt5.ORDER_TIME_GTC,
-                "type_filling": mt5.ORDER_FILLING_IOC,
+                "type_time": self.mt5.ORDER_TIME_GTC,
+                "type_filling": self.mt5.ORDER_FILLING_IOC,
             }
 
-            result = mt5.order_send(request)
+            result = self.mt5.order_send(request)
 
-            if result.retcode == mt5.TRADE_RETCODE_DONE:
+            if result.retcode == self.mt5.TRADE_RETCODE_DONE:
                 logger.info(f"Position {ticket} closed successfully")
                 successful += 1
             else:
@@ -243,7 +266,7 @@ class MT5Connector:
         if not self.connected:
             return None
 
-        info = mt5.symbol_info(symbol)
+        info = self.mt5.symbol_info(symbol)
         if info is None:
             return None
 

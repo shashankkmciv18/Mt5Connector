@@ -1,0 +1,11 @@
+2026-03-06 01:30:59,998 | INFO     | __main__ | Log file: /Users/shashank/PycharmProjects/Simulator/logs/prop_monitor_20260306_013059.log
+2026-03-06 01:30:59,998 | INFO     | __main__ | Connecting to MetaTrader 5...
+2026-03-06 01:30:59,998 | ERROR    | __main__ | Fatal error: initialize() missing 1 required positional argument: 'self'
+Traceback (most recent call last):
+  File "/Users/shashank/PycharmProjects/Simulator/main.py", line 251, in main
+    run_monitor(config)
+  File "/Users/shashank/PycharmProjects/Simulator/main.py", line 69, in run_monitor
+    mt5 = MT5Connector(magic_filter=config.get('magic_filter'))
+  File "/Users/shashank/PycharmProjects/Simulator/core/mt5_connector.py", line 25, in __init__
+    mt5.initialize(host="localhost", port=8001, keepalive=True)
+TypeError: initialize() missing 1 required positional argument: 'self'

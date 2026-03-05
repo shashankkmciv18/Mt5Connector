@@ -1,0 +1,22 @@
+2026-03-06 02:06:05,676 | INFO     | __main__ | Log file: /Users/shashank/PycharmProjects/Simulator/logs/prop_monitor_20260306_020605.log
+2026-03-06 02:06:05,676 | INFO     | __main__ | Connecting to MetaTrader 5...
+2026-03-06 02:06:05,676 | INFO     | __main__ | Using login credentials: LoginConfig(login=732600, password='***', server='BlackBullMarkets-Demo', timeout=60000)
+2026-03-06 02:06:05,861 | INFO     | core.mt5_connector | Connected to MT5 - Account: 732600
+2026-03-06 02:06:05,869 | INFO     | core.mt5_connector | Server: BlackBullMarkets-Demo, Balance: 5985.36
+2026-03-06 02:06:05,915 | INFO     | core.prop_rule_engine | Rule Engine Initialized - FundedNext Express 6K
+2026-03-06 02:06:05,915 | INFO     | core.prop_rule_engine | Starting Balance: $6000.00
+2026-03-06 02:06:05,915 | INFO     | core.prop_rule_engine | Max Daily Loss: $300.00 (5.0%)
+2026-03-06 02:06:05,916 | INFO     | core.prop_rule_engine | Max Total DD: $600.00 (10.0%)
+2026-03-06 02:06:05,916 | INFO     | core.prop_rule_engine | Profit Target: $600.00 (10.0%)
+2026-03-06 02:06:05,916 | INFO     | __main__ | ======================================================================
+2026-03-06 02:06:05,916 | INFO     | __main__ |   PROP FIRM CHALLENGE MONITOR STARTED
+2026-03-06 02:06:05,916 | INFO     | __main__ | ======================================================================
+2026-03-06 02:06:05,916 | INFO     | __main__ | Firm: FundedNext Express 6K
+2026-03-06 02:06:05,916 | INFO     | __main__ | Starting Balance: $6000.00
+2026-03-06 02:06:05,916 | INFO     | __main__ | Poll Interval: 1.0s
+2026-03-06 02:06:05,916 | INFO     | __main__ | Auto-close on breach: False
+2026-03-06 02:06:05,916 | INFO     | __main__ | ======================================================================
+2026-03-06 02:15:14,942 | INFO     | __main__ | 
+⚠️  Monitoring stopped by user
+2026-03-06 02:15:15,234 | INFO     | core.mt5_connector | Disconnected from MT5
+2026-03-06 02:15:15,235 | INFO     | __main__ | Disconnected from MT5

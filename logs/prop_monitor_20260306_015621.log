@@ -1,0 +1,3 @@
+2026-03-06 01:56:21,954 | INFO     | __main__ | Log file: /Users/shashank/PycharmProjects/Simulator/logs/prop_monitor_20260306_015621.log
+2026-03-06 01:56:24,939 | INFO     | __main__ | Connecting to MetaTrader 5...
+2026-03-06 01:56:24,940 | INFO     | __main__ | Using login credentials: LoginConfig(login=732600, password='***', server='BlackBullMarkets-Demo', timeout=60000)

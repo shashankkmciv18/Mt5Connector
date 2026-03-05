@@ -1,0 +1,20 @@
+2026-03-06 01:57:57,820 | INFO     | __main__ | Log file: /Users/shashank/PycharmProjects/Simulator/logs/prop_monitor_20260306_015757.log
+2026-03-06 01:57:57,820 | INFO     | __main__ | Connecting to MetaTrader 5...
+2026-03-06 01:57:57,820 | INFO     | __main__ | Using login credentials: LoginConfig(login=732600, password='***', server='BlackBullMarkets-Demo', timeout=60000)
+2026-03-06 01:58:11,886 | INFO     | core.mt5_connector | Connected to MT5 - Account: 732600
+2026-03-06 01:58:12,528 | INFO     | core.mt5_connector | Server: BlackBullMarkets-Demo, Balance: 6000.0
+2026-03-06 01:58:22,210 | INFO     | core.prop_rule_engine | Rule Engine Initialized - FundedNext Express 6K
+2026-03-06 01:58:22,210 | INFO     | core.prop_rule_engine | Starting Balance: $6000.00
+2026-03-06 01:58:22,211 | INFO     | core.prop_rule_engine | Max Daily Loss: $300.00 (5.0%)
+2026-03-06 01:58:22,211 | INFO     | core.prop_rule_engine | Max Total DD: $600.00 (10.0%)
+2026-03-06 01:58:22,211 | INFO     | core.prop_rule_engine | Profit Target: $600.00 (10.0%)
+2026-03-06 01:58:24,284 | INFO     | __main__ | ======================================================================
+2026-03-06 01:58:24,827 | INFO     | __main__ |   PROP FIRM CHALLENGE MONITOR STARTED
+2026-03-06 01:58:25,312 | INFO     | __main__ | ======================================================================
+2026-03-06 01:58:25,496 | INFO     | __main__ | Firm: FundedNext Express 6K
+2026-03-06 01:58:25,671 | INFO     | __main__ | Starting Balance: $6000.00
+2026-03-06 01:58:25,820 | INFO     | __main__ | Poll Interval: 1.0s
+2026-03-06 01:58:26,446 | INFO     | __main__ | Auto-close on breach: False
+2026-03-06 01:58:26,876 | INFO     | __main__ | ======================================================================
+2026-03-06 02:02:43,578 | INFO     | __main__ | 
+⚠️  Monitoring stopped by user
